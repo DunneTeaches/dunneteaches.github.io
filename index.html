@@ -5,58 +5,211 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Interactive Python Algorithms</title>
   <style>
-    body { font-family: system-ui, Arial, sans-serif; max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+    :root {
+      color-scheme: light;
+      --bg: #f4f7ff;
+      --surface: #ffffff;
+      --surface-soft: #f8faff;
+      --text: #10203b;
+      --muted: #4c5d7b;
+      --border: #d8e2ff;
+      --brand: #3b5cff;
+      --brand-dark: #2d46c8;
+      --shadow: 0 14px 30px rgba(36, 63, 160, 0.14);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, #dce6ff, transparent 40%),
+        radial-gradient(circle at bottom left, #dde6ff, transparent 30%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 28px auto 40px;
+      padding: 0 16px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #1b2d80, #304dcf 62%, #4867ff);
+      color: #fff;
+      border-radius: 18px;
+      padding: 24px 26px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.6rem, 3vw, 2.1rem);
+      letter-spacing: .2px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 8px 0 0;
+    }
+
+    .hero .small { color: rgba(255,255,255,0.88); margin-top: 6px; }
+
     .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
-    .card { border: 1px solid #ddd; border-radius: 10px; padding: 16px; flex: 1 1 520px; }
-    label { display:block; margin-top: 10px; font-weight: 600; }
-    input, select, textarea, button { width: 100%; padding: 10px; margin-top: 6px; font-size: 14px; }
-    textarea { height: 260px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    pre { background: #0b1020; color: #e6e6e6; padding: 12px; border-radius: 10px; overflow: auto; white-space: pre-wrap; }
-    .small { color:#555; font-size: 13px; }
-    .btnRow { display:flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
-    .btnRow button { flex: 1 1 160px; }
-    details { margin-top: 12px; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      flex: 1 1 520px;
+    }
+
+    .card h3 { margin: 2px 0 8px; }
+
+    label {
+      display:block;
+      margin-top: 10px;
+      font-weight: 600;
+      color: #21335a;
+    }
+
+    input, select, textarea, button {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 6px;
+      font-size: 14px;
+      border-radius: 10px;
+      border: 1px solid #cbd7ff;
+      background: var(--surface-soft);
+      color: #122048;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: 2px solid #a3b6ff;
+      border-color: #8aa1ff;
+      background: #fff;
+    }
+
+    textarea {
+      height: 260px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      line-height: 1.45;
+      resize: vertical;
+    }
+
+    pre {
+      background: #0f1838;
+      color: #f3f4ff;
+      padding: 12px;
+      border-radius: 12px;
+      overflow: auto;
+      white-space: pre-wrap;
+      border: 1px solid #243569;
+    }
+
+    .btnRow {
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .btnRow button {
+      flex: 1 1 160px;
+      border: none;
+      color: white;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--brand), #5a76ff);
+      box-shadow: 0 8px 18px rgba(59, 92, 255, 0.28);
+      cursor: pointer;
+      transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
+    }
+
+    .btnRow button:hover:enabled {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(59, 92, 255, 0.38);
+      background: linear-gradient(135deg, var(--brand-dark), #4f66f6);
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    details {
+      margin-top: 12px;
+      background: #f4f7ff;
+      border: 1px solid #d9e2ff;
+      border-radius: 10px;
+      padding: 10px;
+    }
+
     summary { cursor: pointer; font-weight: 700; }
+
+    #status {
+      min-height: 18px;
+      font-weight: 500;
+    }
+
+    @media (max-width: 760px) {
+      .hero { padding: 18px; }
+      .card { padding: 14px; }
+      .btnRow { gap: 8px; }
+    }
   </style>
 </head>
 <body>
-  <h1>Interactive Python Algorithms</h1>
-  <p class="small">Runs locally in your browser using Pyodide. No server needed.</p>
+  <main>
+    <section class="hero">
+      <h1>Interactive Python Algorithms</h1>
+      <p class="small">Run and tweak classic algorithm examples directly in your browser with Pyodide.</p>
+    </section>
 
-  <div class="row">
-    <div class="card">
-      <label for="algo">Algorithm</label>
-      <select id="algo"></select>
+    <div class="row">
+      <div class="card">
+        <label for="algo">Algorithm</label>
+        <select id="algo"></select>
 
-      <label for="inputA" id="labelA">Input A</label>
-      <input id="inputA" />
+        <label for="inputA" id="labelA">Input A</label>
+        <input id="inputA" />
 
-      <label for="inputB" id="labelB">Input B</label>
-      <input id="inputB" />
+        <label for="inputB" id="labelB">Input B</label>
+        <input id="inputB" />
 
-      <div class="btnRow">
-        <button id="runBtn" disabled>Loading Python runtime…</button>
-        <button id="resetBtn" disabled>Reset code</button>
-        <button id="explainBtn" disabled>Explain</button>
+        <div class="btnRow">
+          <button id="runBtn" disabled>Loading Python runtime…</button>
+          <button id="resetBtn" disabled>Reset code</button>
+          <button id="explainBtn" disabled>Explain</button>
+        </div>
+
+        <p id="status" class="small"></p>
+
+        <details id="explainPanel">
+          <summary>Explanation</summary>
+          <pre id="explainText"></pre>
+        </details>
+
+        <h3>Output</h3>
+        <pre id="output"></pre>
       </div>
 
-      <p id="status" class="small"></p>
-
-      <details id="explainPanel">
-        <summary>Explanation</summary>
-        <pre id="explainText"></pre>
-      </details>
-
-      <h3>Output</h3>
-      <pre id="output"></pre>
+      <div class="card">
+        <h3>Python code</h3>
+        <p class="small">Edit this code, then click Run.</p>
+        <textarea id="code" spellcheck="false"></textarea>
+      </div>
     </div>
-
-    <div class="card">
-      <h3>Python code</h3>
-      <p class="small">Edit this code, then click Run.</p>
-      <textarea id="code" spellcheck="false"></textarea>
-    </div>
-  </div>
+  </main>
 
   <script type="module" src="./app.js"></script>
 </body>
