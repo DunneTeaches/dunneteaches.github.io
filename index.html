@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Interactive Python Algorithms</title>
+    <style>
+        body {
+            font-family: system-ui, Arial, sans-serif;
+            max-width: 980px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+
+        .row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 16px;
+            flex: 1 1 420px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        input,
+        select,
+        textarea,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            font-size: 14px;
+        }
+
+        textarea {
+            height: 180px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        }
+
+        pre {
+            background: #0b1020;
+            color: #e6e6e6;
+            padding: 12px;
+            border-radius: 10px;
+            overflow: auto;
+        }
+
+        .small {
+            color: #555;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Interactive Python Algorithms</h1>
+    <p class="small">Runs locally in your browser using Pyodide. No server needed.</p>
+
+    <div class="row">
+        <div class="card">
+            <label for="algo">Algorithm</label>
+            <select id="algo"></select>
+
+            <label for="inputA">Input</label>
+            <input id="inputA" />
+
+            <label for="inputB">Optional input</label>
+            <input id="inputB" />
+
+            <button id="runBtn" disabled>Loading Python runtime…</button>
+            <p id="status" class="small"></p>
+
+            <h3>Output</h3>
+            <pre id="output"></pre>
+        </div>
+
+        <div class="card">
+            <h3>Python code</h3>
+            <p class="small">This is the code executed when you click Run.</p>
+            <textarea id="code" spellcheck="false"></textarea>
+        </div>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+</body>
+
+</html>
