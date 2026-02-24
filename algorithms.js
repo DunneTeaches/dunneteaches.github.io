@@ -138,7 +138,7 @@ print("Selection steps:", steps)
 
   {
     id: "quick_sort",
-    name: "Quick Sort (Lomuto partition)",
+    name: "Quick Sort",
     labels: { a: "Array (comma separated ints)", b: "Optional: pivot mode (last or middle)" },
     defaults: { inputA: "10,7,8,9,1,5", inputB: "last" },
     explain: [
@@ -311,3 +311,4 @@ else:
 `
   }
 ];
+
