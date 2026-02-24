@@ -7,15 +7,15 @@
   <style>
     :root {
       color-scheme: light;
-      --bg: #13110f;
-      --surface: #1f1a17;
-      --surface-soft: #2a231d;
-      --text: #ffb25a;
-      --muted: #ffc178;
-      --border: #5b3a1d;
-      --brand: #ff8a00;
-      --brand-dark: #e16f00;
-      --shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+      --bg: #f4f7ff;
+      --surface: #ffffff;
+      --surface-soft: #f8faff;
+      --text: #10203b;
+      --muted: #4c5d7b;
+      --border: #d8e2ff;
+      --brand: #3b5cff;
+      --brand-dark: #2d46c8;
+      --shadow: 0 14px 30px rgba(36, 63, 160, 0.14);
       --radius: 14px;
     }
 
@@ -26,8 +26,8 @@
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top right, #5b2d00, transparent 40%),
-        radial-gradient(circle at bottom left, #3d2108, transparent 30%),
+        radial-gradient(circle at top right, #dce6ff, transparent 40%),
+        radial-gradient(circle at bottom left, #dde6ff, transparent 30%),
         var(--bg);
       min-height: 100vh;
     }
@@ -39,7 +39,7 @@
     }
 
     .hero {
-      background: linear-gradient(135deg, #28170a, #4a2508 62%, #7a3900);
+      background: linear-gradient(135deg, #1b2d80, #304dcf 62%, #4867ff);
       color: #fff;
       border-radius: 18px;
       padding: 24px 26px;
@@ -59,7 +59,7 @@
       margin: 8px 0 0;
     }
 
-    .hero .small { color: #ffd39f; margin-top: 6px; }
+    .hero .small { color: rgba(255,255,255,0.88); margin-top: 6px; }
 
     .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
 
@@ -78,7 +78,7 @@
       display:block;
       margin-top: 10px;
       font-weight: 600;
-      color: #ffc98f;
+      color: #21335a;
     }
 
     input, select, textarea, button {
@@ -87,15 +87,15 @@
       margin-top: 6px;
       font-size: 14px;
       border-radius: 10px;
-      border: 1px solid #6b4523;
+      border: 1px solid #cbd7ff;
       background: var(--surface-soft);
-      color: #ffe0ba;
+      color: #122048;
     }
 
     input:focus, select:focus, textarea:focus {
-      outline: 2px solid #ffad4d;
-      border-color: #ff9722;
-      background: #2f261f;
+      outline: 2px solid #a3b6ff;
+      border-color: #8aa1ff;
+      background: #fff;
     }
 
     textarea {
@@ -106,13 +106,13 @@
     }
 
     pre {
-      background: #0a0908;
-      color: #ffd9ad;
+      background: #0f1838;
+      color: #f3f4ff;
       padding: 12px;
       border-radius: 12px;
       overflow: auto;
       white-space: pre-wrap;
-      border: 1px solid #563519;
+      border: 1px solid #243569;
     }
 
     .btnRow {
@@ -127,16 +127,16 @@
       border: none;
       color: white;
       font-weight: 600;
-      background: linear-gradient(135deg, var(--brand), #ffab3d);
-      box-shadow: 0 8px 18px rgba(255, 136, 0, 0.28);
+      background: linear-gradient(135deg, var(--brand), #5a76ff);
+      box-shadow: 0 8px 18px rgba(59, 92, 255, 0.28);
       cursor: pointer;
       transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
     }
 
     .btnRow button:hover:enabled {
       transform: translateY(-1px);
-      box-shadow: 0 10px 22px rgba(255, 136, 0, 0.36);
-      background: linear-gradient(135deg, var(--brand-dark), #ff8f18);
+      box-shadow: 0 10px 22px rgba(59, 92, 255, 0.38);
+      background: linear-gradient(135deg, var(--brand-dark), #4f66f6);
     }
 
     button:disabled {
@@ -148,8 +148,8 @@
 
     details {
       margin-top: 12px;
-      background: #211812;
-      border: 1px solid #5f3815;
+      background: #f4f7ff;
+      border: 1px solid #d9e2ff;
       border-radius: 10px;
       padding: 10px;
     }
