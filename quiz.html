@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Python Quiz</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f7ff;
+      --surface: #ffffff;
+      --surface-soft: #f8faff;
+      --text: #10203b;
+      --muted: #4c5d7b;
+      --border: #d8e2ff;
+      --brand: #3b5cff;
+      --brand-dark: #2d46c8;
+      --shadow: 0 14px 30px rgba(36, 63, 160, 0.14);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, #dce6ff, transparent 40%),
+        radial-gradient(circle at bottom left, #dde6ff, transparent 30%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    main {
+      max-width: 760px;
+      margin: 28px auto 40px;
+      padding: 0 16px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #1b2d80, #304dcf 62%, #4867ff);
+      color: #fff;
+      border-radius: 18px;
+      padding: 24px 26px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    h1 { margin: 0; font-size: clamp(1.6rem, 3vw, 2.1rem); letter-spacing: .2px; }
+
+    .small { color: var(--muted); font-size: 13px; margin: 8px 0 0; }
+    .hero .small { color: rgba(255,255,255,0.88); margin-top: 6px; }
+
+    .nav-link {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: var(--brand);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .nav-link:hover { color: var(--brand-dark); text-decoration: underline; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+
+    /* Progress bar */
+    .progress-wrap {
+      background: #e4ecff;
+      border-radius: 99px;
+      height: 8px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      background: linear-gradient(90deg, var(--brand), #5a76ff);
+      height: 100%;
+      border-radius: 99px;
+      transition: width .35s ease;
+    }
+
+    .question-meta {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .question-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0 0 20px;
+      line-height: 1.5;
+    }
+
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .choice-btn {
+      background: var(--surface-soft);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color .15s, background .15s, transform .12s;
+      width: 100%;
+    }
+
+    .choice-btn:hover:not(:disabled) {
+      border-color: var(--brand);
+      background: #edf0ff;
+      transform: translateY(-1px);
+    }
+
+    .choice-btn.correct {
+      border-color: #22b07d;
+      background: #e8faf4;
+      color: #156447;
+    }
+
+    .choice-btn.wrong {
+      border-color: #e05260;
+      background: #fdf0f1;
+      color: #8b1c28;
+    }
+
+    .choice-btn:disabled { cursor: default; transform: none; }
+
+    .feedback {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .feedback.show { display: block; }
+    .feedback.correct { background: #e8faf4; border: 1px solid #b4e8d4; color: #156447; }
+    .feedback.wrong   { background: #fdf0f1; border: 1px solid #f5bfc4; color: #8b1c28; }
+
+    .next-btn {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, var(--brand), #5a76ff);
+      box-shadow: 0 8px 18px rgba(59, 92, 255, 0.28);
+      cursor: pointer;
+      transition: transform .14s, box-shadow .14s, background .14s;
+      display: none;
+    }
+
+    .next-btn.show { display: block; }
+    .next-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(59,92,255,.38); background: linear-gradient(135deg, var(--brand-dark), #4f66f6); }
+
+    /* Results panel */
+    #results { display: none; }
+    #results.show { display: block; }
+    #quiz-panel.hide { display: none; }
+
+    .score-ring {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: conic-gradient(var(--brand) var(--pct), #e4ecff 0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px;
+      box-shadow: 0 4px 16px rgba(59,92,255,.18);
+    }
+
+    .score-inner {
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .score-number { font-size: 1.6rem; font-weight: 700; color: var(--brand); }
+    .score-label  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .results-title { text-align: center; font-size: 1.2rem; font-weight: 700; margin: 0 0 6px; }
+    .results-msg   { text-align: center; color: var(--muted); font-size: 14px; margin: 0 0 24px; }
+
+    .review-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+
+    .review-item {
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .review-item.correct { background: #e8faf4; border: 1px solid #b4e8d4; }
+    .review-item.wrong   { background: #fdf0f1; border: 1px solid #f5bfc4; }
+
+    .review-q { font-weight: 600; margin-bottom: 4px; }
+    .review-a { color: var(--muted); }
+
+    .restart-btn {
+      margin-top: 24px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, var(--brand), #5a76ff);
+      box-shadow: 0 8px 18px rgba(59,92,255,.28);
+      cursor: pointer;
+      transition: transform .14s, box-shadow .14s;
+    }
+
+    .restart-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(59,92,255,.38); }
+
+    @media (max-width: 600px) {
+      .hero { padding: 18px; }
+      .card { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="nav-link" href="index.html">← Back to Algorithms</a>
+
+    <section class="hero">
+      <h1>Python &amp; Algorithms Quiz</h1>
+      <p class="small">Test your knowledge of Python and classic algorithms. 10 questions — choose the best answer for each.</p>
+    </section>
+
+    <div class="card">
+
+      <!-- Quiz panel -->
+      <div id="quiz-panel">
+        <div class="progress-wrap">
+          <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+        </div>
+
+        <p class="question-meta" id="question-meta">Question 1 of 10</p>
+        <p class="question-text" id="question-text"></p>
+
+        <div class="choices" id="choices"></div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <button class="next-btn" id="next-btn">Next question →</button>
+      </div>
+
+      <!-- Results panel -->
+      <div id="results">
+        <div class="score-ring" id="score-ring">
+          <div class="score-inner">
+            <span class="score-number" id="score-number"></span>
+            <span class="score-label">out of 10</span>
+          </div>
+        </div>
+        <p class="results-title" id="results-title"></p>
+        <p class="results-msg"   id="results-msg"></p>
+
+        <ul class="review-list" id="review-list"></ul>
+
+        <button class="restart-btn" id="restart-btn">Try again</button>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const QUESTIONS = [
+      {
+        question: "What is the time complexity of binary search on a sorted array?",
+        choices: ["O(n)", "O(n log n)", "O(log n)", "O(1)"],
+        answer: 2,
+        explanation: "Binary search halves the search space at each step, giving O(log n)."
+      },
+      {
+        question: "Which sorting algorithm has the best worst-case time complexity?",
+        choices: ["Bubble Sort", "Insertion Sort", "Quick Sort", "Merge Sort"],
+        answer: 3,
+        explanation: "Merge Sort guarantees O(n log n) in all cases; Quick Sort degrades to O(n^2) in the worst case."
+      },
+      {
+        question: "What data structure follows LIFO (last-in, first-out) order?",
+        choices: ["Queue", "Stack", "Deque", "Heap"],
+        answer: 1,
+        explanation: "A stack is LIFO: the last element pushed is the first one popped."
+      },
+      {
+        question: "In Python, what does [] create?",
+        choices: ["A tuple", "A dict", "A list", "A set"],
+        answer: 2,
+        explanation: "Square brackets [] create an empty list in Python."
+      },
+      {
+        question: "What is the space complexity of Bubble Sort?",
+        choices: ["O(n)", "O(n log n)", "O(log n)", "O(1)"],
+        answer: 3,
+        explanation: "Bubble Sort is an in-place algorithm that uses only O(1) extra memory."
+      },
+      {
+        question: "Which Python keyword is used to define a function?",
+        choices: ["func", "define", "def", "fn"],
+        answer: 2,
+        explanation: "'def' is the keyword used to define a function in Python."
+      },
+      {
+        question: "What does the 'in' operator do when used with a Python list?",
+        choices: [
+          "Returns the index of an element",
+          "Checks whether an element exists in the list",
+          "Returns the length of the list",
+          "Checks whether the list is sorted"
+        ],
+        answer: 1,
+        explanation: "'x in lst' returns True if x is present anywhere in lst."
+      },
+      {
+        question: "Which Python built-in function returns the number of items in a list?",
+        choices: ["count()", "size()", "length()", "len()"],
+        answer: 3,
+        explanation: "len() returns the number of items in a sequence or collection."
+      },
+      {
+        question: "What is the average time complexity of Quick Sort?",
+        choices: ["O(n)", "O(n²)", "O(n log n)", "O(log n)"],
+        answer: 2,
+        explanation: "Quick Sort averages O(n log n) with a good pivot strategy."
+      },
+      {
+        question: "Which of the following creates an immutable sequence in Python?",
+        choices: ["list", "dict", "set", "tuple"],
+        answer: 3,
+        explanation: "A tuple is an immutable sequence; its contents cannot be changed after creation."
+      }
+    ];
+
+    let order = [];
+    let current = 0;
+    let score = 0;
+    let answers = [];
+    let answered = false;
+
+    const quizPanel    = document.getElementById("quiz-panel");
+    const resultsPanel = document.getElementById("results");
+    const progressBar  = document.getElementById("progress-bar");
+    const questionMeta = document.getElementById("question-meta");
+    const questionText = document.getElementById("question-text");
+    const choicesEl    = document.getElementById("choices");
+    const feedbackEl   = document.getElementById("feedback");
+    const nextBtn      = document.getElementById("next-btn");
+    const restartBtn   = document.getElementById("restart-btn");
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function startQuiz() {
+      order = shuffle(QUESTIONS.map((_, i) => i));
+      current = 0;
+      score = 0;
+      answers = [];
+      resultsPanel.classList.remove("show");
+      quizPanel.classList.remove("hide");
+      showQuestion();
+    }
+
+    function showQuestion() {
+      answered = false;
+      const q = QUESTIONS[order[current]];
+      const total = QUESTIONS.length;
+      const pct = (current / total) * 100;
+
+      progressBar.style.width = pct + "%";
+      questionMeta.textContent = `Question ${current + 1} of ${total}`;
+      questionText.textContent = q.question;
+
+      choicesEl.innerHTML = "";
+      q.choices.forEach((text, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "choice-btn";
+        btn.textContent = `${String.fromCharCode(65 + idx)}) ${text}`;
+        btn.addEventListener("click", () => handleAnswer(idx));
+        choicesEl.appendChild(btn);
+      });
+
+      feedbackEl.className = "feedback";
+      feedbackEl.textContent = "";
+      nextBtn.className = "next-btn";
+    }
+
+    function handleAnswer(idx) {
+      if (answered) return;
+      answered = true;
+
+      const q = QUESTIONS[order[current]];
+      const correct = idx === q.answer;
+      if (correct) score++;
+
+      answers.push({ qIdx: order[current], chosen: idx, correct });
+
+      const buttons = choicesEl.querySelectorAll(".choice-btn");
+      buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === q.answer) btn.classList.add("correct");
+        else if (i === idx && !correct) btn.classList.add("wrong");
+      });
+
+      feedbackEl.textContent = (correct ? "✓ Correct! " : "✗ Incorrect. ") + q.explanation;
+      feedbackEl.className = "feedback show " + (correct ? "correct" : "wrong");
+
+      const isLast = current === QUESTIONS.length - 1;
+      nextBtn.textContent = isLast ? "See results" : "Next question →";
+      nextBtn.className = "next-btn show";
+    }
+
+    nextBtn.addEventListener("click", () => {
+      current++;
+      if (current >= QUESTIONS.length) {
+        showResults();
+      } else {
+        showQuestion();
+      }
+    });
+
+    restartBtn.addEventListener("click", startQuiz);
+
+    function showResults() {
+      quizPanel.classList.add("hide");
+      progressBar.style.width = "100%";
+
+      const total = QUESTIONS.length;
+      const pct = Math.round((score / total) * 100);
+
+      document.getElementById("score-ring").style.setProperty("--pct", pct + "%");
+      document.getElementById("score-number").textContent = score;
+
+      const title = document.getElementById("results-title");
+      const msg   = document.getElementById("results-msg");
+      if (score === total) {
+        title.textContent = "Perfect score — excellent work!";
+        msg.textContent = "You answered all " + total + " questions correctly.";
+      } else if (score >= total * 0.8) {
+        title.textContent = "Great job!";
+        msg.textContent = `You got ${score} out of ${total} correct (${pct}%).`;
+      } else if (score >= total * 0.5) {
+        title.textContent = "Good effort — keep practising!";
+        msg.textContent = `You got ${score} out of ${total} correct (${pct}%).`;
+      } else {
+        title.textContent = "Keep studying — you'll improve!";
+        msg.textContent = `You got ${score} out of ${total} correct (${pct}%). Review the explanations below.`;
+      }
+
+      const list = document.getElementById("review-list");
+      list.innerHTML = "";
+      answers.forEach(({ qIdx, chosen, correct }) => {
+        const q = QUESTIONS[qIdx];
+        const li = document.createElement("li");
+        li.className = "review-item " + (correct ? "correct" : "wrong");
+        const icon = correct ? "✓" : "✗";
+        li.innerHTML = `<div class="review-q">${icon} ${q.question}</div>`
+          + `<div class="review-a">Your answer: ${q.choices[chosen]}${!correct ? ` — Correct: ${q.choices[q.answer]}` : ""}</div>`;
+        list.appendChild(li);
+      });
+
+      resultsPanel.classList.add("show");
+    }
+
+    startQuiz();
+  </script>
+</body>
+</html>
